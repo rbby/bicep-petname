@@ -48,9 +48,7 @@ jobs:
           mkdir -p ${PACKAGE_DIR}
           
           # Copy Bicep module and documentation
-          cp ./petname.bicep ${PACKAGE_DIR}/
-          cp ./README.md ${PACKAGE_DIR}/
-          cp ./LICENSE ${PACKAGE_DIR}/
+          cp ./petname.bicep ${PACKAGE_DIR}
           
           # Create compressed package
           tar -czf ${PACKAGE_DIR}.tar.gz ${PACKAGE_DIR}
