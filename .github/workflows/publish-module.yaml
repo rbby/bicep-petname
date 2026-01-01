@@ -1,0 +1,64 @@
+name: Publish Module
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  WORKLOAD_NAME: 'bicep-petname'
+  
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      issues: read
+      checks: write
+      pull-requests: write
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Replace USERNAME with your GitHub username or org name
+
+
+      - name: Publish Bicep Module
+        run: |
+          MODULE_NAME="bicep-petname"
+          MODULE_VERSION="1.0.0"
+          MODULE_PATH="./bicep/modules/${MODULE_NAME}"
+
+          echo $GITHUB_PAT | docker login ghcr.io -u rbby --password-stdin
+
+          # Syntax:
+          # az bicep publish \
+          #   --file <path-to-bicep> \
+          #   --target <registry>/<repo>/<module-path>:<version>
+
+          az bicep publish \
+            --file ./petname.bicep \
+            --target ghcr.io/rbby/bicep-modules/petname:1.0.0
+
+
+
+          # # Create the module package
+          # mkdir -p ${MODULE_NAME}-${MODULE_VERSION}
+          # cp -r ${MODULE_PATH}/* ${MODULE_NAME}-${MODULE_VERSION}/
+          # tar -czf ${MODULE_NAME}-${MODULE_VERSION}.tar.gz ${MODULE_NAME}-${MODULE_VERSION}
+          
+          # # Publish the module to GitHub Packages
+          # curl -X POST \
+          #   -H "Authorization: Bearer $GITHUB_PAT" \
+          #   -H "Content-Type: application/gzip" \
+          #   --data-binary @${MODULE_NAME}-${MODULE_VERSION}.tar.gz \
+          #   "https://api.github.com/orgs/USERNAME/packages/bicep-modules/versions"
+        
