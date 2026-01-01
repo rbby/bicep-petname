@@ -31,13 +31,17 @@ jobs:
       # Replace USERNAME with your GitHub username or org name
 
 
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Publish Bicep Module
         run: |
           MODULE_NAME="bicep-petname"
           MODULE_VERSION="1.0.0"
-          MODULE_PATH="./bicep/modules/${MODULE_NAME}"
-
-          echo $GITHUB_PAT | docker login ghcr.io -u rbby --password-stdin
 
           # Syntax:
           # az bicep publish \
@@ -46,7 +50,7 @@ jobs:
 
           az bicep publish \
             --file ./petname.bicep \
-            --target ghcr.io/rbby/bicep-modules/petname:1.0.0
+            --target ghcr.io/${{ github.repository_owner }}/bicep-modules/petname:${MODULE_VERSION}
 
 
 
