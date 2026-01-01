@@ -59,8 +59,3 @@ jobs:
             # az bicep publish \
             #   --file ./petname.bicep \
             #   --target ghcr.io/${{ github.repository_owner }}/bicep-modules/petname:${MODULE_VERSION}
-
-
-
-  
-        
