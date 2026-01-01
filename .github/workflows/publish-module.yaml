@@ -48,21 +48,21 @@ jobs:
           #   --file <path-to-bicep> \
           #   --target <registry>/<repo>/<module-path>:<version>
 
-          az bicep publish \
-            --file ./petname.bicep \
-            --target ghcr.io/${{ github.repository_owner }}/bicep-modules/petname:${MODULE_VERSION}
+          # az bicep publish \
+          #   --file ./petname.bicep \
+          #   --target ghcr.io/${{ github.repository_owner }}/bicep-modules/petname:${MODULE_VERSION}
 
 
 
-          # # Create the module package
-          # mkdir -p ${MODULE_NAME}-${MODULE_VERSION}
-          # cp -r ${MODULE_PATH}/* ${MODULE_NAME}-${MODULE_VERSION}/
-          # tar -czf ${MODULE_NAME}-${MODULE_VERSION}.tar.gz ${MODULE_NAME}-${MODULE_VERSION}
+          # Create the module package
+          mkdir -p ${MODULE_NAME}-${MODULE_VERSION}
+          cp -r ${MODULE_PATH}/* ${MODULE_NAME}-${MODULE_VERSION}/
+          tar -czf ${MODULE_NAME}-${MODULE_VERSION}.tar.gz ${MODULE_NAME}-${MODULE_VERSION}
           
-          # # Publish the module to GitHub Packages
-          # curl -X POST \
-          #   -H "Authorization: Bearer $GITHUB_PAT" \
-          #   -H "Content-Type: application/gzip" \
-          #   --data-binary @${MODULE_NAME}-${MODULE_VERSION}.tar.gz \
-          #   "https://api.github.com/orgs/USERNAME/packages/bicep-modules/versions"
+          # Publish the module to GitHub Packages
+          curl -X POST \
+            -H "Authorization: Bearer $GITHUB_PAT" \
+            -H "Content-Type: application/gzip" \
+            --data-binary @${MODULE_NAME}-${MODULE_VERSION}.tar.gz \
+            "https://api.github.com/orgs/USERNAME/packages/bicep-modules/versions"
         
