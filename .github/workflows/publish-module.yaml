@@ -52,10 +52,14 @@ jobs:
             MODULE_NAME="bicep-petname"
             MODULE_VERSION="1.0.0"
 
-            az bicep publish \
-              --file petname.bicep \
-              --target br:ghcr.io/rbby/bicep-petname:1.0.0
+            # az bicep publish \
+            #   --file petname.bicep \
+            #   --target br:ghcr.io/rbby/bicep-petname:1.0.0
               
             # az bicep publish \
             #   --file ./petname.bicep \
             #   --target ghcr.io/${{ github.repository_owner }}/bicep-modules/petname:${MODULE_VERSION}
+    
+            az bicep publish \
+              --file petname.bicep \
+              --target "br:ghcr.io/${{ github.repository_owner }}/bicep-petname:${MODULE_VERSION}"
