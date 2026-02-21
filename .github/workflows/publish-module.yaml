@@ -48,8 +48,17 @@ jobs:
         with:
           azcliversion: latest
           inlineScript: |
+            set -ex
             az --version
-            az stack create \
+            TEMPLATE_FILE_PATH="./deployment/module-template-spec.bicep"
+
+            az bicep build $TEMPLATE_FILE_PATH --outdir ./deployment/compiled
+            COMPILED_TEMPLATE_FILE_PATH="./deployment/compiled/module-template-spec.json"
+
+            az stack sub create  \
               --name petname-stack \
-              --scope /subscriptions/$(az account show --query id -o tsv) \
-              --template-file ./deployment/deploy-template-spec.bicep
+              --template-file $COMPILED_TEMPLATE_FILE_PATH \
+              --location germanywestcentral \
+              --description "Stack for deploying the bicep petname module template spec" \
+              --deny-settings-mode None \
+              --action-on-unmanage detachAll

@@ -10,7 +10,6 @@ resource templateSpecRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
 module templateSpecModule 'module-template-spec.bicep' = {
   scope: resourceGroup(templateSpecRG.name)
   params: {
-    templateSpecRGName: templateSpecRG.name
     location: templateSpecRG.location
   }
 }
