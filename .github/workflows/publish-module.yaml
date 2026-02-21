@@ -52,12 +52,11 @@ jobs:
             az --version
             TEMPLATE_FILE_PATH="./src/petname.bicep"
 
-            az bicep build --file $TEMPLATE_FILE_PATH --outdir ./deployment/compiled
-            COMPILED_TEMPLATE_FILE_PATH="./deployment/compiled/petname.json"
+            az bicep build --file $TEMPLATE_FILE_PATH --outdir ./src
 
             az stack sub create  \
               --name petname-stack \
-              --template-file $COMPILED_TEMPLATE_FILE_PATH \
+              --template-file .deployment/deploy-template-spec.bicep \
               --location germanywestcentral \
               --description "Stack for deploying the bicep petname module template spec" \
               --deny-settings-mode None \
