@@ -50,10 +50,10 @@ jobs:
           inlineScript: |
             set -ex
             az --version
-            TEMPLATE_FILE_PATH="./deployment/module-template-spec.bicep"
+            TEMPLATE_FILE_PATH="./src/petname.bicep"
 
-            az bicep build $TEMPLATE_FILE_PATH --outdir ./deployment/compiled
-            COMPILED_TEMPLATE_FILE_PATH="./deployment/compiled/module-template-spec.json"
+            az bicep build --file $TEMPLATE_FILE_PATH --outdir ./deployment/compiled
+            COMPILED_TEMPLATE_FILE_PATH="./deployment/compiled/petname.json"
 
             az stack sub create  \
               --name petname-stack \
