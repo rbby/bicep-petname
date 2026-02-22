@@ -1,14 +1,14 @@
-extension microsoftGraphV1
+// extension microsoftGraphV1
 
 param location string = 'Germany West Central'
 
-resource entraIdGroup 'Microsoft.Graph/groups@v1.0' = {
-  displayName: 'My Security Group'
-  mailEnabled: false
-  mailNickname: 'mySecurityGroup'
-  securityEnabled: true
-  uniqueName: 'mySecurityGroup'
-}
+// resource entraIdGroup 'Microsoft.Graph/groups@v1.0' = {
+//   displayName: 'My Security Group'
+//   mailEnabled: false
+//   mailNickname: 'mySecurityGroup'
+//   securityEnabled: true
+//   uniqueName: 'mySecurityGroup'
+// }
 
 resource templateSpec 'Microsoft.Resources/templateSpecs@2022-02-01' = {
   name: 'petname'
