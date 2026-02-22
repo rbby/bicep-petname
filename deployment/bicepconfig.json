@@ -1,0 +1,72 @@
+{
+  "cloud": {
+    "currentProfile": "AzureCloud",
+    "profiles": {
+      "AzureCloud": {
+        "resourceManagerEndpoint": "https://management.azure.com/",
+        "activeDirectoryAuthority": "https://login.microsoftonline.com/"
+      }
+    },
+    "credentialPrecedence": [
+      "AzureCLI",
+      "AzurePowerShell",
+      "Environment"
+    ]
+  },
+  "extensions": {
+    "microsoftGraphV1": "br:mcr.microsoft.com/bicep/extensions/microsoftgraph/v1.0:1.0.0"
+  },
+  "analyzers": {
+    "core": {
+      "enabled": true,
+      "verbose": false,
+      "rules": {
+        "no-hardcoded-env-urls": {
+          "level": "warning"
+        },
+        "no-unused-params": {
+          "level": "warning"
+        },
+        "no-unused-vars": {
+          "level": "warning"
+        },
+        "prefer-interpolation": {
+          "level": "warning"
+        },
+        "secure-parameter-default": {
+          "level": "error"
+        },
+        "simplify-interpolation": {
+          "level": "warning"
+        },
+        "protect-commandtoexecute-secrets": {
+          "level": "error"
+        },
+        "use-stable-vm-image": {
+          "level": "warning"
+        },
+        "explicit-values-for-loc-params": {
+          "level": "off"
+        },
+        "no-deployments-resources": {
+          "level": "warning"
+        }
+      }
+    }
+  },
+  "experimentalFeaturesEnabled": {
+    "extensibility": true,
+    "resourceTypedPointers": true,
+    "sourceMapping": true,
+    "userDefinedFunctions": true
+  },
+  "formatting": {
+    "indentKind": "Space",
+    "indentSize": 2,
+    "newlineKind": "LF"
+  },
+  "moduleAliases": {
+    "br": {},
+    "ts": {}
+  }
+}
