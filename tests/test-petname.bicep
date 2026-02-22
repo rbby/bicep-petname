@@ -4,15 +4,15 @@
 */
 
 // Import the petname module
-import * as petname from './petname.bicep'
+import * as petname from '../src/petname.bicep'
 
 // Test 1: Default configuration (2 words with dash separator)
-module defaultPetname './petname.bicep' = {
+module defaultPetname '../src/petname.bicep' = {
   name: 'defaultPetname'
 }
 
 // Test 2: Single word name
-module singleWord './petname.bicep' = {
+module singleWord '../src/petname.bicep' = {
   name: 'singleWord'
   params: {
     wordCount: 1
@@ -21,7 +21,7 @@ module singleWord './petname.bicep' = {
 }
 
 // Test 3: Two word name with custom separator
-module twoWordUnderscore './petname.bicep' = {
+module twoWordUnderscore '../src/petname.bicep' = {
   name: 'twoWordUnderscore'
   params: {
     wordCount: 2
@@ -31,7 +31,7 @@ module twoWordUnderscore './petname.bicep' = {
 }
 
 // Test 4: Three word name
-module threeWord './petname.bicep' = {
+module threeWord '../src/petname.bicep' = {
   name: 'threeWord'
   params: {
     wordCount: 3
@@ -40,7 +40,7 @@ module threeWord './petname.bicep' = {
 }
 
 // Test 5: Empty separator
-module noSeparator './petname.bicep' = {
+module noSeparator '../src/petname.bicep' = {
   name: 'noSeparator'
   params: {
     wordCount: 2
@@ -50,7 +50,7 @@ module noSeparator './petname.bicep' = {
 }
 
 // Test 6: Dot separator for domain-style names
-module dotSeparator './petname.bicep' = {
+module dotSeparator '../src/petname.bicep' = {
   name: 'dotSeparator'
   params: {
     wordCount: 3
