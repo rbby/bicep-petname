@@ -56,7 +56,7 @@ jobs:
 
             az stack sub create  \
               --name petname-stack \
-              --template-file .deployment/deploy-template-spec.bicep \
+              --template-file ./deployment/deploy-template-spec.bicep \
               --location germanywestcentral \
               --description "Stack for deploying the bicep petname module template spec" \
               --deny-settings-mode None \
