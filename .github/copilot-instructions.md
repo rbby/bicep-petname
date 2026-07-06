@@ -17,19 +17,19 @@ This is a Bicep module for generating human-readable, random names for Azure res
 ### Naming Generation
 1. **Word Lists**: Three arrays store word categories (adjectives, adverbs, names)
 2. **Seeding**: Uses seed parameter for deterministic randomization
-3. **Index Calculation**: Modulo operation on seed creates pseudo-random index
+3. **Index Calculation**: The seed is normalized to a non-negative value (double modulo against the prime 715827883, so negative seeds are valid) and mixed with Knuth's multiplicative constant 2654435761 before the final modulo, so nearby seeds (e.g. consecutive `utcNow` timestamps) map to unrelated words
 4. **Composition**: Functions combine words with separators based on word count
 
 ### Function Exports
 All key functions are marked with `@export()` decorator:
 - `getRandomIndex()` - Core randomization logic
 - `getAdverb()`, `getAdjective()`, `getName()` - Word selectors
-- `generateTwoWords()`, `generateThreeWords()` - Composition functions
+- `generateTwoWords()`, `generateThreeWords()`, `generateFourWords()` - Composition functions
 
 ### Seed Management
 - Default seed uses `utcNow('yyyyMMddHHmmss')` for time-based uniqueness
 - Custom seeds enable reproducible names
-- Offset seeds (+1, +2) ensure different words from same base seed
+- Offset seeds (+1, +2, +3) ensure different words from same base seed
 
 ## Development Guidelines
 
@@ -37,7 +37,7 @@ All key functions are marked with `@export()` decorator:
 When adding words to any list:
 - Keep words simple, positive, and professional
 - Avoid offensive, ambiguous, or confusing terms
-- Maintain alphabetical order for readability
+- Maintain alphabetical order for readability (the `names` list is grouped by word length, alphabetical within each group)
 - Test with various seed values to ensure distribution
 
 ### Modifying Generation Logic
@@ -47,12 +47,14 @@ When adding words to any list:
 - Document any changes to randomization algorithm
 
 ### Testing Approach
-Use [test-petname.bicep](test-petname.bicep) to verify:
+Use [test-petname.bicep](../test-petname.bicep) to verify:
 - All word count options (1-4 words)
 - Different separators (dash, underscore, dot, empty)
 - Multiple seeds produce different outputs
 - Exported functions work correctly
 - Module outputs are consistent
+
+The test file's `assert*` boolean outputs pin known seed→name pairs; run `./test.sh <resource-group>` to deploy it and fail on any false assertion. When changing generation logic or word lists, these assertions must be deliberately regenerated (they encode the backward-compatibility contract).
 
 ### Azure Integration Best Practices
 - Use as imported module in other Bicep files
@@ -102,6 +104,6 @@ module uniqueName './petname.bicep' = {
 ## Maintenance Notes
 
 - Word lists are static arrays - no runtime modification
-- Limited to 1-4 words (enforced by output logic)
-- Randomization is pseudo-random (modulo-based, not cryptographic)
+- Limited to 1-4 words (enforced by `@minValue`/`@maxValue` on `wordCount`)
+- Randomization is pseudo-random (seed mixing + modulo, not cryptographic)
 - Apache 2.0 licensed - maintain copyright attribution
