@@ -54,7 +54,9 @@ Use [test-petname.bicep](../test-petname.bicep) to verify:
 - Exported functions work correctly
 - Module outputs are consistent
 
-The test file's `assert*` boolean outputs pin known seed→name pairs; run `./test.sh <resource-group>` to deploy it and fail on any false assertion. When changing generation logic or word lists, these assertions must be deliberately regenerated (they encode the backward-compatibility contract).
+The test file's `assert*` boolean outputs pin known seed→name pairs; run `./test.sh <resource-group>` to deploy it and fail on any false assertion.
+
+For fast local/CI checks without a deployment, [tests/petname.assertions.bicep](../tests/petname.assertions.bicep) pins the same pairs as `assert` statements, evaluated by the experimental Bicep test framework: `bicep test tests/petname.tests.bicep` (run in CI by the Test workflow). When changing generation logic or word lists, both assertion sets must be deliberately regenerated in sync (they encode the backward-compatibility contract).
 
 ### Azure Integration Best Practices
 - Use as imported module in other Bicep files

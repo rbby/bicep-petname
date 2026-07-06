@@ -46,13 +46,19 @@ Generation is deterministic: the same seed always produces the same name, so fix
 
 ## Testing
 
-Bicep outputs are only evaluated at deployment time, so tests run as a real deployment. `test-petname.bicep` exercises all word counts and separators and includes `assert*` outputs pinning known seed→name pairs (the backward-compatibility guarantee):
+Two layers, both pinning known seed→name pairs (the backward-compatibility guarantee):
+
+**Local (no Azure needed)** — assertion tests via the experimental Bicep test framework, run automatically in CI on every push/PR:
+
+```bash
+~/.azure/bin/bicep test tests/petname.tests.bicep
+```
+
+**Deployment (end-to-end)** — `test-petname.bicep` exercises all word counts and separators as real module deployments; `test.sh` deploys it and fails if any `assert*` output is false:
 
 ```bash
 ./test.sh <resource-group>
 ```
-
-The script deploys the test file and fails if any assertion is false.
 
 ## Publishing
 

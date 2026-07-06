@@ -8,18 +8,20 @@ A pure Bicep module that generates human-readable, pseudo-random names for Azure
 
 ## Commands
 
-There is no build system or test framework; validation is done with the Bicep CLI:
-
 ```bash
 # Compile/validate the module (also validates the test file, which imports it)
 az bicep build --file test-petname.bicep
 
-# Or with the standalone Bicep CLI
-bicep build test-petname.bicep
+# Run the local assertion tests (no Azure needed; also run in CI by test.yaml).
+# `az bicep` does not expose the test subcommand, so call the binary directly.
+~/.azure/bin/bicep test tests/petname.tests.bicep
 
-# Run the test suite: deploys test-petname.bicep and fails if any assert* output is false
+# Run the deployment-level test suite: deploys test-petname.bicep and fails
+# if any assert* output is false
 ./test.sh <resource-group>
 ```
+
+The local tests use the experimental Bicep test framework; the flags enabling it live in `tests/bicepconfig.json` and apply only to files under `tests/` — never enable them in a root bicepconfig.json, or the published module builds pick them up.
 
 Publishing to the GitHub Container Registry (`br:ghcr.io/<owner>/bicep-petname`) is done via the manually-triggered `publish-module.yaml` GitHub Actions workflow (`workflow_dispatch` only); the version is a required workflow input.
 
@@ -36,6 +38,6 @@ Randomization is deterministic: `getRandomIndex` normalizes the seed to non-nega
 
 ## Constraints (from .github/copilot-instructions.md)
 
-- **Preserve determinism and backward compatibility**: the same seed must always produce the same name. The `assert*` outputs in `test-petname.bicep` encode this contract — changing the mixing/offset scheme or word lists breaks them and must be a deliberate decision (with assertions regenerated).
+- **Preserve determinism and backward compatibility**: the same seed must always produce the same name. This contract is encoded twice — the `assert*` outputs in `test-petname.bicep` and the `assert` statements in `tests/petname.assertions.bicep` (enforced in CI) — and the two must stay in sync. Changing the mixing/offset scheme or word lists breaks them and must be a deliberate decision, with both sets of expected values regenerated.
 - **Word lists**: keep words simple, positive, and professional; maintain alphabetical order (within each word-length group in `names`); word lists are static — no runtime modification.
 - Apache 2.0 licensed — keep the license header in `petname.bicep`.
