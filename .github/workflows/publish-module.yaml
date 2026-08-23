@@ -7,6 +7,9 @@ on:
         description: 'Module version to publish (e.g. 1.1.0)'
         required: true
         type: string
+  push:
+    tags:
+      - 'v*.*.*'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -44,6 +47,17 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # workflow_dispatch supplies the version directly; a tag push (v1.2.0)
+      # derives it by stripping the leading "v" from the ref name.
+      - name: Determine version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "value=${{ inputs.version }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+          fi
+
       # `az bicep publish` only uses Docker-compatible credentials (from the
       # login step above) for a `br:` target instead of Azure AD auth when
       # the `ociEnabled` experimental feature is set (see bicepconfig.json);
@@ -53,4 +67,4 @@ jobs:
           owner=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')
           az bicep publish \
             --file main.bicep \
-            --target "br:ghcr.io/${owner}/bicep-namesmith:${{ inputs.version }}"
+            --target "br:ghcr.io/${owner}/bicep-namesmith:${{ steps.version.outputs.value }}"

@@ -26,7 +26,7 @@ az bicep run --command "test tests/unit/namesmith.tests.bicep"
 
 The local tests use the experimental Bicep test framework; the flags enabling it live in `tests/unit/bicepconfig.json` and apply only to files under `tests/unit/` — never enable them in a root bicepconfig.json, or the published module builds pick them up.
 
-Publishing to the GitHub Container Registry (`br:ghcr.io/<owner>/bicep-namesmith`) is done via the manually-triggered `publish-module.yaml` GitHub Actions workflow (`workflow_dispatch` only); the version is a required workflow input.
+Publishing to the GitHub Container Registry (`br:ghcr.io/<owner>/bicep-namesmith`) is done via the `publish-module.yaml` GitHub Actions workflow, either manually via `workflow_dispatch` (version given as a required input) or automatically when a `v*.*.*` tag is pushed to main (version derived from the tag name).
 
 ## Architecture
 
