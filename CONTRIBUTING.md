@@ -39,5 +39,4 @@ If you have an Azure subscription and want to exercise the deployment-level suit
   static — no runtime modification.
 - Keep the Apache 2.0 license header at the top of `main.bicep`.
 
-See [CLAUDE.md](CLAUDE.md) for the full architecture writeup, and
-[docs/adr/](docs/adr/) for the reasoning behind the repo's file layout.
+See [CLAUDE.md](CLAUDE.md) for the full architecture writeup.

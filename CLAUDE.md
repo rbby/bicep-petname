@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A pure Bicep module that generates human-readable, pseudo-random names for Azure resources (e.g., `bright-falcon`, `happily-golden-eagle`). Inspired by Dustin Kirkland's petname utility. No external dependencies — the module itself lives in a single Bicep file (`main.bicep`); tests live under `tests/`.
 
-The repo's file layout follows an AVM-aligned convention (Azure Verified Modules is the closest named standard for a Bicep registry module), with deliberate deviations — see [docs/adr/0001-avm-aligned-file-structure.md](docs/adr/0001-avm-aligned-file-structure.md) and [docs/adr/0002-rename-main-bicep.md](docs/adr/0002-rename-main-bicep.md).
+The repo's file layout follows an AVM-aligned convention (Azure Verified Modules is the closest named standard for a Bicep registry module), with deliberate deviations.
 
 ## Commands
 
