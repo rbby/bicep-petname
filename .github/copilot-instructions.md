@@ -47,7 +47,7 @@ When adding words to any list:
 - Document any changes to randomization algorithm
 
 ### Testing Approach
-Use [test-namesmith.bicep](../test-namesmith.bicep) to verify:
+Use [tests/e2e/defaults/main.test.bicep](../tests/e2e/defaults/main.test.bicep) to verify:
 - All word count options (1-4 words)
 - Different separators (dash, underscore, dot, empty)
 - Multiple seeds produce different outputs
@@ -56,7 +56,7 @@ Use [test-namesmith.bicep](../test-namesmith.bicep) to verify:
 
 The test file's `assert*` boolean outputs pin known seed→name pairs; run `./test.sh <resource-group>` to deploy it and fail on any false assertion.
 
-For fast local/CI checks without a deployment, [tests/namesmith.assertions.bicep](../tests/namesmith.assertions.bicep) pins the same pairs as `assert` statements, evaluated by the experimental Bicep test framework: `bicep test tests/namesmith.tests.bicep` (run in CI by the Test workflow). When changing generation logic or word lists, both assertion sets must be deliberately regenerated in sync (they encode the backward-compatibility contract).
+For fast local/CI checks without a deployment, [tests/unit/namesmith.assertions.bicep](../tests/unit/namesmith.assertions.bicep) pins the same pairs as `assert` statements, evaluated by the experimental Bicep test framework: `bicep test tests/unit/namesmith.tests.bicep` (run in CI by the Test workflow). When changing generation logic or word lists, both assertion sets must be deliberately regenerated in sync (they encode the backward-compatibility contract).
 
 ### Azure Integration Best Practices
 - Use as imported module in other Bicep files
@@ -67,7 +67,7 @@ For fast local/CI checks without a deployment, [tests/namesmith.assertions.bicep
 ## Key Files
 
 - [namesmith.bicep](../namesmith.bicep) - Main module with word lists and generation logic
-- [test-namesmith.bicep](../test-namesmith.bicep) - Comprehensive test scenarios and usage examples
+- [tests/e2e/defaults/main.test.bicep](../tests/e2e/defaults/main.test.bicep) - Comprehensive test scenarios and usage examples
 - [README.md](../README.md) - Public documentation
 
 ## Common Usage Patterns

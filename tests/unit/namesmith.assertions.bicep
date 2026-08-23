@@ -1,14 +1,15 @@
 /*
   Assertion harness for namesmith.bicep, evaluated locally (no deployment) by
-  the experimental Bicep test framework via tests/namesmith.tests.bicep.
+  the experimental Bicep test framework via tests/unit/namesmith.tests.bicep.
 
   These pin the seed -> name backward-compatibility contract: the same seed
   must always produce the same name. If a change to the generation logic or
   word lists breaks them, that break must be deliberate and the expected
-  values regenerated. They mirror the assert* outputs in ../test-namesmith.bicep.
+  values regenerated. They mirror the assert* outputs in
+  ../e2e/defaults/main.test.bicep.
 */
 
-import * as namesmith from '../namesmith.bicep'
+import * as namesmith from '../../namesmith.bicep'
 
 // One word per count
 assert singleWord = namesmith.getName(99999) == 'bengal'

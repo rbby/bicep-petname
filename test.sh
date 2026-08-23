@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Deploys test-namesmith.bicep to a resource group and fails if any assert*
-# output is false. Bicep outputs are only evaluated at deployment time, so a
-# real (subscription-scoped) deployment is required to test values.
+# Deploys tests/e2e/defaults/main.test.bicep to a resource group and fails if
+# any assert* output is false. Bicep outputs are only evaluated at deployment
+# time, so a real (subscription-scoped) deployment is required to test values.
 #
 # Usage: ./test.sh <resource-group>
 set -euo pipefail
@@ -12,11 +12,11 @@ if [[ $# -ne 1 ]]; then
 fi
 rg="$1"
 
-echo "Deploying test-namesmith.bicep to resource group '$rg'..."
+echo "Deploying tests/e2e/defaults/main.test.bicep to resource group '$rg'..."
 outputs=$(az deployment group create \
   --resource-group "$rg" \
   --name "namesmith-test-$(date +%s)" \
-  --template-file "$(dirname "$0")/test-namesmith.bicep" \
+  --template-file "$(dirname "$0")/tests/e2e/defaults/main.test.bicep" \
   --query 'properties.outputs' \
   --output json)
 

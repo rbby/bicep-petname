@@ -51,10 +51,10 @@ Two layers, both pinning known seed→name pairs (the backward-compatibility gua
 **Local (no Azure needed)** — assertion tests via the experimental Bicep test framework, run automatically in CI on every push/PR:
 
 ```bash
-~/.azure/bin/bicep test tests/namesmith.tests.bicep
+~/.azure/bin/bicep test tests/unit/namesmith.tests.bicep
 ```
 
-**Deployment (end-to-end)** — `test-namesmith.bicep` exercises all word counts and separators as real module deployments; `test.sh` deploys it and fails if any `assert*` output is false:
+**Deployment (end-to-end)** — `tests/e2e/defaults/main.test.bicep` exercises all word counts and separators as real module deployments; `test.sh` deploys it and fails if any `assert*` output is false:
 
 ```bash
 ./test.sh <resource-group>

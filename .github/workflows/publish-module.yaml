@@ -29,12 +29,12 @@ jobs:
       - name: Build Bicep files
         run: |
           az bicep build --file namesmith.bicep --outfile /dev/null
-          az bicep build --file test-namesmith.bicep --outfile /dev/null
+          az bicep build --file tests/e2e/defaults/main.test.bicep --outfile /dev/null
 
       # Gate publishing on the assertion tests. `az bicep` does not expose
       # the test subcommand, so call the az-installed binary directly.
       - name: Run assertion tests
-        run: ~/.azure/bin/bicep test tests/namesmith.tests.bicep
+        run: ~/.azure/bin/bicep test tests/unit/namesmith.tests.bicep
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
