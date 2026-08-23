@@ -36,13 +36,13 @@ Publishing to the GitHub Container Registry (`br:ghcr.io/<owner>/bicep-namesmith
 - **`tests/e2e/defaults/main.test.bicep`** — exercises both usage styles across word counts (1–4), separators, and seeds, and pins known seed→name pairs in `assert*` boolean outputs. Bicep outputs are only evaluated at deployment time, so `test.sh` deploys it and fails on any false assertion.
 - **`tests/unit/`** — `namesmith.tests.bicep` + `namesmith.assertions.bicep`, the no-Azure-needed counterpart evaluated by the experimental Bicep test framework; mirrors the same seed→name pairs as `assert` statements.
 - **`examples/`** — standalone, independently-buildable `.bicep` files demonstrating usage patterns beyond the README's inline snippets (currently: generating several distinct names for multiple resources in one deployment via per-resource seed offsets).
-- **`CONTRIBUTING.md`** — human-facing front door restating the commands and constraints below; keep it in sync with this file and `.github/copilot-instructions.md` when either changes.
+- **`CONTRIBUTING.md`** — human-facing front door restating the commands and constraints below; keep it in sync with this file when either changes.
 
 ### Generation logic
 
 Randomization is deterministic: `getRandomIndex` normalizes the seed to non-negative (double modulo against prime 715827883 — negative seeds are valid) and mixes it with Knuth's multiplier 2654435761 before the final modulo, so consecutive seeds (e.g. `utcNow` timestamps) map to unrelated words. Word selectors offset the seed (+0 adverb, +1 adjective, +2 name, +3 second adverb) so one seed yields different words per position. The default seed is `int(utcNow('yyyyMMddHHmmss'))` for deployment-time uniqueness.
 
-## Constraints (from .github/copilot-instructions.md)
+## Constraints
 
 - **Preserve determinism and backward compatibility**: the same seed must always produce the same name. This contract is encoded twice — the `assert*` outputs in `tests/e2e/defaults/main.test.bicep` and the `assert` statements in `tests/unit/namesmith.assertions.bicep` (enforced in CI) — and the two must stay in sync. Changing the mixing/offset scheme or word lists breaks them and must be a deliberate decision, with both sets of expected values regenerated.
 - **Word lists**: keep words simple, positive, and professional; maintain alphabetical order (within each word-length group in `names`); word lists are static — no runtime modification.
