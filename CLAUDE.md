@@ -4,9 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-A pure Bicep module that generates human-readable, pseudo-random names for Azure resources (e.g., `bright-falcon`, `happily-golden-eagle`). Inspired by Dustin Kirkland's petname utility. No external dependencies — the module itself lives in a single Bicep file (`namesmith.bicep`); tests live under `tests/`.
+A pure Bicep module that generates human-readable, pseudo-random names for Azure resources (e.g., `bright-falcon`, `happily-golden-eagle`). Inspired by Dustin Kirkland's petname utility. No external dependencies — the module itself lives in a single Bicep file (`main.bicep`); tests live under `tests/`.
 
-The repo's file layout follows an AVM-aligned convention (Azure Verified Modules is the closest named standard for a Bicep registry module), with deliberate deviations — see [docs/adr/0001-avm-aligned-file-structure.md](docs/adr/0001-avm-aligned-file-structure.md).
+The repo's file layout follows an AVM-aligned convention (Azure Verified Modules is the closest named standard for a Bicep registry module), with deliberate deviations — see [docs/adr/0001-avm-aligned-file-structure.md](docs/adr/0001-avm-aligned-file-structure.md) and [docs/adr/0002-rename-main-bicep.md](docs/adr/0002-rename-main-bicep.md).
 
 ## Commands
 
@@ -30,9 +30,9 @@ Publishing to the GitHub Container Registry (`br:ghcr.io/<owner>/bicep-namesmith
 
 ## Architecture
 
-- **`namesmith.bicep`** — the entire module: three static word-list arrays (`adjectives`, `adverbs`, `names`), a set of `@export()`-ed functions, and module outputs. Usable two ways:
-  1. As a module (`module x './namesmith.bicep'` with `wordCount`, `separator`, `seed` params; read `outputs.name`)
-  2. Via function import (`import * as namesmith from './namesmith.bicep'`, then `namesmith.generateTwoWords('-', seed)`)
+- **`main.bicep`** — the entire module: three static word-list arrays (`adjectives`, `adverbs`, `names`), a set of `@export()`-ed functions, and module outputs. Usable two ways:
+  1. As a module (`module x './main.bicep'` with `wordCount`, `separator`, `seed` params; read `outputs.name`)
+  2. Via function import (`import * as namesmith from './main.bicep'`, then `namesmith.generateTwoWords('-', seed)`)
 - **`tests/e2e/defaults/main.test.bicep`** — exercises both usage styles across word counts (1–4), separators, and seeds, and pins known seed→name pairs in `assert*` boolean outputs. Bicep outputs are only evaluated at deployment time, so `test.sh` deploys it and fails on any false assertion.
 - **`tests/unit/`** — `namesmith.tests.bicep` + `namesmith.assertions.bicep`, the no-Azure-needed counterpart evaluated by the experimental Bicep test framework; mirrors the same seed→name pairs as `assert` statements.
 
@@ -44,4 +44,4 @@ Randomization is deterministic: `getRandomIndex` normalizes the seed to non-nega
 
 - **Preserve determinism and backward compatibility**: the same seed must always produce the same name. This contract is encoded twice — the `assert*` outputs in `tests/e2e/defaults/main.test.bicep` and the `assert` statements in `tests/unit/namesmith.assertions.bicep` (enforced in CI) — and the two must stay in sync. Changing the mixing/offset scheme or word lists breaks them and must be a deliberate decision, with both sets of expected values regenerated.
 - **Word lists**: keep words simple, positive, and professional; maintain alphabetical order (within each word-length group in `names`); word lists are static — no runtime modification.
-- Apache 2.0 licensed — keep the license header in `namesmith.bicep`.
+- Apache 2.0 licensed — keep the license header in `main.bicep`.

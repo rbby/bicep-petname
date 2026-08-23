@@ -28,7 +28,7 @@ jobs:
 
       - name: Build Bicep files
         run: |
-          az bicep build --file namesmith.bicep --outfile /dev/null
+          az bicep build --file main.bicep --outfile /dev/null
           az bicep build --file tests/e2e/defaults/main.test.bicep --outfile /dev/null
 
       # Gate publishing on the assertion tests. `az bicep` has no dedicated
@@ -50,5 +50,5 @@ jobs:
         run: |
           owner=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')
           az bicep publish \
-            --file namesmith.bicep \
+            --file main.bicep \
             --target "br:ghcr.io/${owner}/bicep-namesmith:${{ inputs.version }}"

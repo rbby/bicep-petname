@@ -9,7 +9,7 @@ AI did all the heavy lifting here.
 ### As a module
 
 ```bicep
-module namesmith './namesmith.bicep' = {
+module namesmith './main.bicep' = {
   name: 'namesmith'
   params: {
     wordCount: 2
@@ -24,7 +24,7 @@ output name string = namesmith.outputs.name
 ### Via imported functions
 
 ```bicep
-import * as namesmith from './namesmith.bicep'
+import * as namesmith from './main.bicep'
 
 output quickName string = namesmith.generateTwoWords('-', 99999)
 output longName string = namesmith.generateFourWords('-', 99999)

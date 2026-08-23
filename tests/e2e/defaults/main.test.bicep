@@ -1,18 +1,18 @@
 /*
-  Test file for namesmith.bicep
+  Test file for main.bicep
   Demonstrates various ways to use the namesmith module
 */
 
 // Import the namesmith module
-import * as namesmith from '../../../namesmith.bicep'
+import * as namesmith from '../../../main.bicep'
 
 // Test 1: Default configuration (2 words with dash separator)
-module defaultName '../../../namesmith.bicep' = {
+module defaultName '../../../main.bicep' = {
   name: 'defaultName'
 }
 
 // Test 2: Single word name
-module singleWord '../../../namesmith.bicep' = {
+module singleWord '../../../main.bicep' = {
   name: 'singleWord'
   params: {
     wordCount: 1
@@ -21,7 +21,7 @@ module singleWord '../../../namesmith.bicep' = {
 }
 
 // Test 3: Two word name with custom separator
-module twoWordUnderscore '../../../namesmith.bicep' = {
+module twoWordUnderscore '../../../main.bicep' = {
   name: 'twoWordUnderscore'
   params: {
     wordCount: 2
@@ -31,7 +31,7 @@ module twoWordUnderscore '../../../namesmith.bicep' = {
 }
 
 // Test 4: Three word name
-module threeWord '../../../namesmith.bicep' = {
+module threeWord '../../../main.bicep' = {
   name: 'threeWord'
   params: {
     wordCount: 3
@@ -40,7 +40,7 @@ module threeWord '../../../namesmith.bicep' = {
 }
 
 // Test 5: Four word name
-module fourWord '../../../namesmith.bicep' = {
+module fourWord '../../../main.bicep' = {
   name: 'fourWord'
   params: {
     wordCount: 4
@@ -49,7 +49,7 @@ module fourWord '../../../namesmith.bicep' = {
 }
 
 // Test 6: Empty separator
-module noSeparator '../../../namesmith.bicep' = {
+module noSeparator '../../../main.bicep' = {
   name: 'noSeparator'
   params: {
     wordCount: 2
@@ -59,7 +59,7 @@ module noSeparator '../../../namesmith.bicep' = {
 }
 
 // Test 7: Dot separator for domain-style names
-module dotSeparator '../../../namesmith.bicep' = {
+module dotSeparator '../../../main.bicep' = {
   name: 'dotSeparator'
   params: {
     wordCount: 3

@@ -66,7 +66,7 @@ For fast local/CI checks without a deployment, [tests/unit/namesmith.assertions.
 
 ## Key Files
 
-- [namesmith.bicep](../namesmith.bicep) - Main module with word lists and generation logic
+- [main.bicep](../main.bicep) - Main module with word lists and generation logic
 - [tests/e2e/defaults/main.test.bicep](../tests/e2e/defaults/main.test.bicep) - Comprehensive test scenarios and usage examples
 - [README.md](../README.md) - Public documentation
 
@@ -74,7 +74,7 @@ For fast local/CI checks without a deployment, [tests/unit/namesmith.assertions.
 
 ### As Module with Outputs
 ```bicep
-module namesmith './namesmith.bicep' = {
+module namesmith './main.bicep' = {
   name: 'resourceName'
   params: {
     wordCount: 2
@@ -88,14 +88,14 @@ output name string = namesmith.outputs.name
 
 ### Using Exported Functions
 ```bicep
-import * as namesmith from './namesmith.bicep'
+import * as namesmith from './main.bicep'
 
 output quickName string = namesmith.generateTwoWords('-', 99999)
 ```
 
 ### Dynamic Seeding for Uniqueness
 ```bicep
-module uniqueName './namesmith.bicep' = {
+module uniqueName './main.bicep' = {
   name: 'uniqueName'
   params: {
     seed: int(utcNow('yyyyMMddHHmmss'))

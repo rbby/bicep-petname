@@ -1,5 +1,5 @@
 /*
-  Assertion harness for namesmith.bicep, evaluated locally (no deployment) by
+  Assertion harness for main.bicep, evaluated locally (no deployment) by
   the experimental Bicep test framework via tests/unit/namesmith.tests.bicep.
 
   These pin the seed -> name backward-compatibility contract: the same seed
@@ -9,7 +9,7 @@
   ../e2e/defaults/main.test.bicep.
 */
 
-import * as namesmith from '../../namesmith.bicep'
+import * as namesmith from '../../main.bicep'
 
 // One word per count
 assert singleWord = namesmith.getName(99999) == 'bengal'

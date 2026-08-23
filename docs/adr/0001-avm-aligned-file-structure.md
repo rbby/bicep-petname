@@ -17,9 +17,11 @@ pipeline-driven versioning.
 
 Adopt the AVM `tests/e2e/<scenario>/main.test.bicep` layout, with three deliberate deviations:
 
-- Keep the entry file named `namesmith.bicep` rather than renaming to `main.bicep`. AVM's
+- ~~Keep the entry file named `namesmith.bicep` rather than renaming to `main.bicep`. AVM's
   filename rule exists so Microsoft's AVM index/tooling can locate modules programmatically;
-  this module isn't in that index, and the name carries the module's domain identity.
+  this module isn't in that index, and the name carries the module's domain identity.~~
+  **Superseded by [ADR-0002](0002-rename-main-bicep.md)**: the entry file is now `main.bicep`.
+  The other two deviations below still stand.
 - Add a `tests/unit/` tier (this repo's existing local `bicep test` assertion harness)
   alongside AVM's `tests/e2e/`, since AVM itself has no slot for that framework.
 - Skip AVM's `version.json` and committed `main.json`. Both are tied to AVM's own release

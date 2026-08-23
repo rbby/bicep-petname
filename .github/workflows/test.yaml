@@ -24,7 +24,7 @@ jobs:
 
       - name: Build Bicep files
         run: |
-          az bicep build --file namesmith.bicep --outfile /dev/null
+          az bicep build --file main.bicep --outfile /dev/null
           az bicep build --file tests/e2e/defaults/main.test.bicep --outfile /dev/null
 
       # `az bicep` has no dedicated `test` wrapper; `run` forwards raw
