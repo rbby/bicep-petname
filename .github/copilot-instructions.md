@@ -56,7 +56,7 @@ Use [tests/e2e/defaults/main.test.bicep](../tests/e2e/defaults/main.test.bicep) 
 
 The test file's `assert*` boolean outputs pin known seed→name pairs; run `./test.sh <resource-group>` to deploy it and fail on any false assertion.
 
-For fast local/CI checks without a deployment, [tests/unit/namesmith.assertions.bicep](../tests/unit/namesmith.assertions.bicep) pins the same pairs as `assert` statements, evaluated by the experimental Bicep test framework: `bicep test tests/unit/namesmith.tests.bicep` (run in CI by the Test workflow). When changing generation logic or word lists, both assertion sets must be deliberately regenerated in sync (they encode the backward-compatibility contract).
+For fast local/CI checks without a deployment, [tests/unit/namesmith.assertions.bicep](../tests/unit/namesmith.assertions.bicep) pins the same pairs as `assert` statements, evaluated by the experimental Bicep test framework: `az bicep run --command "test tests/unit/namesmith.tests.bicep"` (run in CI by the Test workflow). When changing generation logic or word lists, both assertion sets must be deliberately regenerated in sync (they encode the backward-compatibility contract).
 
 ### Azure Integration Best Practices
 - Use as imported module in other Bicep files

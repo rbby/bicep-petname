@@ -15,8 +15,9 @@ The repo's file layout follows an AVM-aligned convention (Azure Verified Modules
 az bicep build --file tests/e2e/defaults/main.test.bicep
 
 # Run the local assertion tests (no Azure needed; also run in CI by test.yaml).
-# `az bicep` does not expose the test subcommand, so call the binary directly.
-~/.azure/bin/bicep test tests/unit/namesmith.tests.bicep
+# `az bicep` has no dedicated `test` wrapper; `run` forwards raw commands to
+# the installed Bicep CLI.
+az bicep run --command "test tests/unit/namesmith.tests.bicep"
 
 # Run the deployment-level test suite: deploys tests/e2e/defaults/main.test.bicep
 # and fails if any assert* output is false

@@ -27,7 +27,7 @@ jobs:
           az bicep build --file namesmith.bicep --outfile /dev/null
           az bicep build --file tests/e2e/defaults/main.test.bicep --outfile /dev/null
 
-      # `az bicep` does not expose the test subcommand, so call the
-      # az-installed binary directly
+      # `az bicep` has no dedicated `test` wrapper; `run` forwards raw
+      # commands to the installed Bicep CLI regardless of where az placed it.
       - name: Run assertion tests
-        run: ~/.azure/bin/bicep test tests/unit/namesmith.tests.bicep
+        run: az bicep run --command "test tests/unit/namesmith.tests.bicep"
