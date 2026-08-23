@@ -41,44 +41,50 @@ param separator string = '-'
 @description('Seed value for randomization (use different values for different names)')
 param seed int = int(utcNow('yyyyMMddHHmmss'))
 
-// Helper function to get a pseudo-random index.
 // The double modulo normalizes negative seeds to [0, 715827883) so array
 // indices are always valid, and the prime multiplier (Knuth's 2654435761)
 // disperses nearby seeds (e.g. consecutive utcNow timestamps) across the
 // word lists instead of walking them sequentially. 715827883 is prime and
 // small enough that the product stays within int64.
+@description('Maps a seed to a valid index into an array of the given length, normalizing negative seeds and dispersing nearby seeds across the array.')
 @export()
 func getRandomIndex(arrayLength int, seedValue int) int => ((((seedValue % 715827883) + 715827883) % 715827883) * 2654435761) % arrayLength
 
-// Returns a random adverb based on seed
+@description('Returns a random adverb based on seed.')
 @export()
 func getAdverb(seedValue int) string => adverbs[getRandomIndex(length(adverbs), seedValue)]
 
-// Returns a random adjective based on seed
+@description('Returns a random adjective based on seed.')
 @export()
 func getAdjective(seedValue int) string => adjectives[getRandomIndex(length(adjectives), seedValue + 1)]
 
-// Returns a random name based on seed
+@description('Returns a random name based on seed.')
 @export()
 func getName(seedValue int) string => names[getRandomIndex(length(names), seedValue + 2)]
 
-// Generates a two-word name (adjective + name)
+@description('Generates a two-word name (adjective + name).')
 @export()
 func generateTwoWords(sep string, seedValue int) string => '${getAdjective(seedValue)}${sep}${getName(seedValue)}'
 
-// Generates a three-word name (adverb + adjective + name)
+@description('Generates a three-word name (adverb + adjective + name).')
 @export()
 func generateThreeWords(sep string, seedValue int) string => '${getAdverb(seedValue)}${sep}${getAdjective(seedValue)}${sep}${getName(seedValue)}'
 
-// Generates a four-word name (adverb + adverb + adjective + name)
+@description('Generates a four-word name (adverb + adverb + adjective + name).')
 @export()
 func generateFourWords(sep string, seedValue int) string => '${getAdverb(seedValue + 3)}${sep}${getAdverb(seedValue)}${sep}${getAdjective(seedValue)}${sep}${getName(seedValue)}'
 
-// Output: Generated name using parameters
+@description('Generated name using the wordCount, separator, and seed parameters.')
 output name string = wordCount == 1 ? getName(seed) : wordCount == 2 ? generateTwoWords(separator, seed) : wordCount == 3 ? generateThreeWords(separator, seed) : generateFourWords(separator, seed)
 
-// Alternative pre-configured outputs
+@description('The generated name using only a single word, regardless of wordCount.')
 output singleWordName string = getName(seed)
+
+@description('The generated name using exactly two words (adjective + name), regardless of wordCount.')
 output twoWordName string = generateTwoWords(separator, seed)
+
+@description('The generated name using exactly three words (adverb + adjective + name), regardless of wordCount.')
 output threeWordName string = generateThreeWords(separator, seed)
+
+@description('The generated name using exactly four words (adverb + adverb + adjective + name), regardless of wordCount.')
 output fourWordName string = generateFourWords(separator, seed)

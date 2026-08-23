@@ -42,7 +42,7 @@ Word composition by count: 1 = name, 2 = adjective + name, 3 = adverb + adjectiv
 
 ## Determinism
 
-Generation is deterministic: the same seed always produces the same name, so fixed seeds give reproducible names and the default `utcNow`-based seed gives deployment-time uniqueness. To generate several distinct names in one deployment, pass different seeds. Randomization is pseudo-random (seed mixing + modulo), not cryptographic.
+Generation is deterministic: the same seed always produces the same name, so fixed seeds give reproducible names and the default `utcNow`-based seed gives deployment-time uniqueness. To generate several distinct names in one deployment, pass different seeds — see [examples/multiple-names.bicep](examples/multiple-names.bicep). Randomization is pseudo-random (seed mixing + modulo), not cryptographic.
 
 ## Testing
 
@@ -63,6 +63,11 @@ az bicep run --command "test tests/unit/namesmith.tests.bicep"
 ## Publishing
 
 The [Publish Module](.github/workflows/publish-module.yaml) workflow (manual trigger) publishes the module to GitHub Container Registry as `br:ghcr.io/<owner>/bicep-namesmith:<version>`; the version is a required workflow input.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for dev setup, test commands, and the rules for
+changing `main.bicep` (determinism, word lists).
 
 ## License
 

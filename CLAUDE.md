@@ -30,11 +30,13 @@ Publishing to the GitHub Container Registry (`br:ghcr.io/<owner>/bicep-namesmith
 
 ## Architecture
 
-- **`main.bicep`** — the entire module: three static word-list arrays (`adjectives`, `adverbs`, `names`), a set of `@export()`-ed functions, and module outputs. Usable two ways:
+- **`main.bicep`** — the entire module: three static word-list arrays (`adjectives`, `adverbs`, `names`), a set of `@export()`-ed functions, and module outputs. Every exported function and output carries an `@description()` decorator (short, consumer-facing "what it does"); where a function's behavior needs a "why" — e.g. `getRandomIndex`'s seed-mixing scheme — that stays as a separate `//` comment above the decorator rather than folding into it. Usable two ways:
   1. As a module (`module x './main.bicep'` with `wordCount`, `separator`, `seed` params; read `outputs.name`)
   2. Via function import (`import * as namesmith from './main.bicep'`, then `namesmith.generateTwoWords('-', seed)`)
 - **`tests/e2e/defaults/main.test.bicep`** — exercises both usage styles across word counts (1–4), separators, and seeds, and pins known seed→name pairs in `assert*` boolean outputs. Bicep outputs are only evaluated at deployment time, so `test.sh` deploys it and fails on any false assertion.
 - **`tests/unit/`** — `namesmith.tests.bicep` + `namesmith.assertions.bicep`, the no-Azure-needed counterpart evaluated by the experimental Bicep test framework; mirrors the same seed→name pairs as `assert` statements.
+- **`examples/`** — standalone, independently-buildable `.bicep` files demonstrating usage patterns beyond the README's inline snippets (currently: generating several distinct names for multiple resources in one deployment via per-resource seed offsets).
+- **`CONTRIBUTING.md`** — human-facing front door restating the commands and constraints below; keep it in sync with this file and `.github/copilot-instructions.md` when either changes.
 
 ### Generation logic
 
