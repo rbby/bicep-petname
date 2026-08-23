@@ -44,8 +44,10 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # az bicep publish authenticates to ghcr.io via the Docker credential
-      # store populated by the login step above; no Azure login is needed.
+      # `az bicep publish` only uses Docker-compatible credentials (from the
+      # login step above) for a `br:` target instead of Azure AD auth when
+      # the `ociEnabled` experimental feature is set (see bicepconfig.json);
+      # without it, publish always tries Azure Identity and fails here.
       - name: Publish module to GitHub Container Registry
         run: |
           owner=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')
