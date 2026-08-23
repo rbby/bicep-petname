@@ -28,13 +28,13 @@ jobs:
 
       - name: Build Bicep files
         run: |
-          az bicep build --file petname.bicep --outfile /dev/null
-          az bicep build --file test-petname.bicep --outfile /dev/null
+          az bicep build --file namesmith.bicep --outfile /dev/null
+          az bicep build --file test-namesmith.bicep --outfile /dev/null
 
       # Gate publishing on the assertion tests. `az bicep` does not expose
       # the test subcommand, so call the az-installed binary directly.
       - name: Run assertion tests
-        run: ~/.azure/bin/bicep test tests/petname.tests.bicep
+        run: ~/.azure/bin/bicep test tests/namesmith.tests.bicep
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
@@ -49,5 +49,5 @@ jobs:
         run: |
           owner=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')
           az bicep publish \
-            --file petname.bicep \
-            --target "br:ghcr.io/${owner}/bicep-petname:${{ inputs.version }}"
+            --file namesmith.bicep \
+            --target "br:ghcr.io/${owner}/bicep-namesmith:${{ inputs.version }}"

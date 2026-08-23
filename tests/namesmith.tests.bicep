@@ -1,6 +1,6 @@
-// Local test entry point: run with `bicep test tests/petname.tests.bicep`
+// Local test entry point: run with `bicep test tests/namesmith.tests.bicep`
 // (requires the experimental testFramework/assertions flags in tests/bicepconfig.json)
 
-test petnameAssertions 'petname.assertions.bicep' = {
+test namesmithAssertions 'namesmith.assertions.bicep' = {
   params: {}
 }

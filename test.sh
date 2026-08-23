@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Deploys test-petname.bicep to a resource group and fails if any assert*
+# Deploys test-namesmith.bicep to a resource group and fails if any assert*
 # output is false. Bicep outputs are only evaluated at deployment time, so a
 # real (subscription-scoped) deployment is required to test values.
 #
@@ -12,11 +12,11 @@ if [[ $# -ne 1 ]]; then
 fi
 rg="$1"
 
-echo "Deploying test-petname.bicep to resource group '$rg'..."
+echo "Deploying test-namesmith.bicep to resource group '$rg'..."
 outputs=$(az deployment group create \
   --resource-group "$rg" \
-  --name "petname-test-$(date +%s)" \
-  --template-file "$(dirname "$0")/test-petname.bicep" \
+  --name "namesmith-test-$(date +%s)" \
+  --template-file "$(dirname "$0")/test-namesmith.bicep" \
   --query 'properties.outputs' \
   --output json)
 

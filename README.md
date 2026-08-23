@@ -1,4 +1,4 @@
-# bicep-petname
+# bicep-namesmith
 
 A pure Bicep module that generates human-readable, pseudo-random names for Azure resources (e.g. `bright-falcon`, `apparently-choice-monkey`). Inspired by the original **petname** utility from [Dustin Kirkland](https://github.com/dustinkirkland). No external dependencies.
 
@@ -9,8 +9,8 @@ AI did all the heavy lifting here.
 ### As a module
 
 ```bicep
-module petname './petname.bicep' = {
-  name: 'petname'
+module namesmith './namesmith.bicep' = {
+  name: 'namesmith'
   params: {
     wordCount: 2
     separator: '-'
@@ -18,16 +18,16 @@ module petname './petname.bicep' = {
   }
 }
 
-output name string = petname.outputs.petName
+output name string = namesmith.outputs.name
 ```
 
 ### Via imported functions
 
 ```bicep
-import * as petname from './petname.bicep'
+import * as namesmith from './namesmith.bicep'
 
-output quickName string = petname.generateTwoWords('-', 99999)
-output longName string = petname.generateFourWords('-', 99999)
+output quickName string = namesmith.generateTwoWords('-', 99999)
+output longName string = namesmith.generateFourWords('-', 99999)
 ```
 
 ## Parameters
@@ -51,10 +51,10 @@ Two layers, both pinning known seed→name pairs (the backward-compatibility gua
 **Local (no Azure needed)** — assertion tests via the experimental Bicep test framework, run automatically in CI on every push/PR:
 
 ```bash
-~/.azure/bin/bicep test tests/petname.tests.bicep
+~/.azure/bin/bicep test tests/namesmith.tests.bicep
 ```
 
-**Deployment (end-to-end)** — `test-petname.bicep` exercises all word counts and separators as real module deployments; `test.sh` deploys it and fails if any `assert*` output is false:
+**Deployment (end-to-end)** — `test-namesmith.bicep` exercises all word counts and separators as real module deployments; `test.sh` deploys it and fails if any `assert*` output is false:
 
 ```bash
 ./test.sh <resource-group>
@@ -62,7 +62,7 @@ Two layers, both pinning known seed→name pairs (the backward-compatibility gua
 
 ## Publishing
 
-The [Publish Module](.github/workflows/publish-module.yaml) workflow (manual trigger) publishes the module to GitHub Container Registry as `br:ghcr.io/<owner>/bicep-petname:<version>`; the version is a required workflow input.
+The [Publish Module](.github/workflows/publish-module.yaml) workflow (manual trigger) publishes the module to GitHub Container Registry as `br:ghcr.io/<owner>/bicep-namesmith:<version>`; the version is a required workflow input.
 
 ## License
 
