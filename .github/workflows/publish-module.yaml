@@ -1,33 +1,44 @@
 name: Publish Module
 
 on:
-  # push:
-  #   branches: [ "main" ]
-  # pull_request:
-  #   branches: [ "main" ]
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Module version to publish (e.g. 1.1.0)'
+        required: true
+        type: string
+  push:
+    tags:
+      - 'v*.*.*'
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  WORKLOAD_NAME: 'bicep-petname'
-  
 jobs:
   publish-module:
     runs-on: ubuntu-latest
     environment: development
     permissions:
-      id-token: write
       contents: read
-      issues: read
-      checks: write
-      pull-requests: write
       packages: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Install Bicep CLI
+        run: az bicep install
+
+      - name: Build Bicep files
+        run: |
+          az bicep build --file main.bicep --outfile /dev/null
+          az bicep build --file tests/e2e/defaults/main.test.bicep --outfile /dev/null
+
+      # Gate publishing on the assertion tests. `az bicep` has no dedicated
+      # `test` wrapper; `run` forwards raw commands to the installed Bicep
+      # CLI regardless of where az placed it.
+      - name: Run assertion tests
+        run: az bicep run --command "test tests/unit/namesmith.tests.bicep"
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
@@ -36,26 +47,24 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Azure Login
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      # workflow_dispatch supplies the version directly; a tag push (v1.2.0)
+      # derives it by stripping the leading "v" from the ref name.
+      - name: Determine version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "value=${{ inputs.version }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+          fi
 
-      - name: Deploy package to GitHub Container Registry
-        uses: azure/cli@v2
-        with:
-          azcliversion: latest
-          inlineScript: |
- 
-            MODULE_NAME="bicep-petname"
-            MODULE_VERSION="1.0.0"
-
-            az bicep publish \
-              --file petname.bicep \
-              --target br:ghcr.io/rbby/bicep-petname:1.0.0
-              
-            # az bicep publish \
-            #   --file ./petname.bicep \
-            #   --target ghcr.io/${{ github.repository_owner }}/bicep-modules/petname:${MODULE_VERSION}
+      # `az bicep publish` only uses Docker-compatible credentials (from the
+      # login step above) for a `br:` target instead of Azure AD auth when
+      # the `ociEnabled` experimental feature is set (see bicepconfig.json);
+      # without it, publish always tries Azure Identity and fails here.
+      - name: Publish module to GitHub Container Registry
+        run: |
+          owner=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')
+          az bicep publish \
+            --file main.bicep \
+            --target "br:ghcr.io/${owner}/bicep-namesmith:${{ steps.version.outputs.value }}"

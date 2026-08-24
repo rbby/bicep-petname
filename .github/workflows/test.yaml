@@ -1,0 +1,33 @@
+name: Test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Bicep CLI
+        run: az bicep install
+
+      - name: Build Bicep files
+        run: |
+          az bicep build --file main.bicep --outfile /dev/null
+          az bicep build --file tests/e2e/defaults/main.test.bicep --outfile /dev/null
+
+      # `az bicep` has no dedicated `test` wrapper; `run` forwards raw
+      # commands to the installed Bicep CLI regardless of where az placed it.
+      - name: Run assertion tests
+        run: az bicep run --command "test tests/unit/namesmith.tests.bicep"
